@@ -1,4 +1,4 @@
-package com.example;
+package Server.src.com.example;
 
 public class Employee implements Comparable<Object>{
 	
