@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,6 +29,10 @@ public class Test {
 
 	public static void main(String[] args) throws Exception {
 
+		//How to grab css
+//		server.createContext("/style.css", new StaticFileServer());
+
+		
 		// set up a simple HTTP server on our local host
 		HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
 
@@ -45,8 +50,23 @@ public class Test {
 
 	static class DisplayHandler implements HttpHandler { //DELETE ALL THIS SHIT
 		//Create route that handles the HREF for the link
+		
 		public void handle(HttpExchange t) throws IOException {
 
+			//This will have to be used for reading, uncomment when we start implementing - WP
+//			String encoding = "UTF-8";
+//			t.getResponseHeaders().set("Content-Type", "text/html; charset=" + encoding);
+		
+			
+			//Add HTML Response
+			
+			
+			//This will finish this, uncomment when we start implementing - WP
+//			t.sendResponseHeaders(200, response.length());
+//			Writer os = new OutputStreamWriter(t.getResponseBody(), encoding);
+//			os.write(response);
+//			os.close();
+			
 			String response = "Begin of response\n";
 			Gson g = new Gson();
 			// set up the header
