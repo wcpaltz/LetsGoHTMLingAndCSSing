@@ -57,6 +57,11 @@ public class Test {
 //			String encoding = "UTF-8";
 //			t.getResponseHeaders().set("Content-Type", "text/html; charset=" + encoding);
 		
+			//Just an example we will need to add more columns - WP
+			String response = "<table><tr>"
+					+ "<th>First Name</th>"
+					+ "<th>Last Name</th>"
+					+ "<th>Department</th></tr>";
 			
 			//Add HTML Response
 			
@@ -67,7 +72,7 @@ public class Test {
 //			os.write(response);
 //			os.close();
 			
-			String response = "Begin of response\n";
+			//String response = "Begin of response\n";
 			Gson g = new Gson();
 			// set up the header
 			System.out.println(response);
