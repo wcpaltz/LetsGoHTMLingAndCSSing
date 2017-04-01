@@ -43,7 +43,8 @@ public class Test {
 		server.start();
 	}
 
-	static class DisplayHandler implements HttpHandler {
+	static class DisplayHandler implements HttpHandler { //DELETE ALL THIS SHIT
+		//Create route that handles the HREF for the link
 		public void handle(HttpExchange t) throws IOException {
 
 			String response = "Begin of response\n";
@@ -116,6 +117,12 @@ public class Test {
 					System.out.println();
 				}
 			}
+			
+			else if(sharedResponse.equalsIgnoreCase("PRINT")){
+				Gson g = new Gson();
+				ArrayList<Employee> fromText = new ArrayList();
+			}
+			
 			else{ //CLEAR response
 				try {
 
