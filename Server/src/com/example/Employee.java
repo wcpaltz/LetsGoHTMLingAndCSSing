@@ -27,5 +27,13 @@ public class Employee implements Comparable<Object>{
 		}
 		return 0;
 	}
+	
+public String HTMLEmployee(){
+		//Firstname, Lastname, Department, Phonenumber
+		return "<tr><td>" + this.firstName + "</td><td>" 
+				+ this.lastName + "</td><td>"
+				+ this.department + "</td><td>"
+				+ this.phoneNumber + "</td></tr>";
+	}
 
 }
