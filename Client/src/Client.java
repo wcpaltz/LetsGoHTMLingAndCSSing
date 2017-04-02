@@ -48,16 +48,9 @@ public class Client {
 						String cont = "";
 
 						do{
-							System.out.println("Please enter employee's first name.");
-							String first = stdIn.nextLine();
-							System.out.println("Please enter employee's last name.");
-							String last = stdIn.nextLine();
-							System.out.println("Please enter employee's department.");
-							String dept = stdIn.nextLine();
-							System.out.println("Please enter employee's phone number.");
-							String phone = stdIn.nextLine();
-
-							empList.add(new Employee(first, last, dept, phone));
+							//TODO convert GUI string to instantiate employees - Zak
+							
+							//empList.add(new Employee(first, last, dept, phone));
 
 							System.out.println("\nType 'STOP' to stop entering employees, or enter anything else to continue.");
 							cont = stdIn.nextLine();

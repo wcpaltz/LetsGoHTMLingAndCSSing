@@ -22,16 +22,15 @@ import com.sun.net.httpserver.HttpServer;
 
 public class Test {
 
-	// a shared area where we get the POST data and then use it in the other handler
+	// a shared area where we get the POST data and then use it in the other
+	// handler
 	static String sharedResponse = "";
 	static boolean gotMessageFlag = false;
 
-
 	public static void main(String[] args) throws Exception {
 
-		//How to grab css
-//		server.createContext("/style.css", new StaticFileServer());
-
+		// How to grab css
+		// server.createContext("/style.css", new StaticFileServer());
 		
 		// set up a simple HTTP server on our local host
 		HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
@@ -40,7 +39,7 @@ public class Test {
 		server.createContext("/displayresults", new DisplayHandler());
 
 		// create a context to get the request for the POST
-		server.createContext("/sendresults",new PostHandler());
+		server.createContext("/sendresults", new PostHandler());
 		server.setExecutor(null); // creates a default executor
 
 		// get it going
@@ -48,23 +47,36 @@ public class Test {
 		server.start();
 	}
 
-	static class DisplayHandler implements HttpHandler { //DELETE ALL THIS SHIT
-		//Create route that handles the HREF for the link
-		
+	static class DisplayHandler implements HttpHandler { // DELETE ALL THIS SHIT
+		// Create route that handles the HREF for the link
+
 		public void handle(HttpExchange t) throws IOException {
 
 			//This will have to be used for reading, uncomment when we start implementing - WP
 //			String encoding = "UTF-8";
 //			t.getResponseHeaders().set("Content-Type", "text/html; charset=" + encoding);
-		
-			//Just an example we will need to add more columns - WP
-			String response = "<table><tr>"
-					+ "<th>First Name</th>"
-					+ "<th>Last Name</th>"
-					+ "<th>Department</th></tr>";
+			//add CSS - Zak
+			String response =
+			"<!DOCTYPE html>  "
+			+ "<html>"   
+		  	+ "<head>"
+		    + "<link rel=\"stylesheet\" href=\"main.css\">"
+		    + "</head>"
+		    + "<style>"
+		    + "</style> <body>"
+		    + "<h2>Lab9 - Give us the Thai candy</h2>"
+		    + "	<table>"
+		    + "   <tr class=\"header\">"
+		    + "       <th>Title</th>"
+		    + "       <th>First Name</th>"
+		    + "       <th>Last Name</th>"
+		    + "       <th>Department</th>"
+		    + "       <th>Phone</th>"
+		    + "       <th>Gender</th>"
+		    + "  </tr>";
+		    //TODO
 			
-			//Add HTML Response
-			
+			//Add HTML Response	
 			
 			//This will finish this, uncomment when we start implementing - WP
 //			t.sendResponseHeaders(200, response.length());
@@ -76,10 +88,11 @@ public class Test {
 			Gson g = new Gson();
 			// set up the header
 			System.out.println(response);
+			ArrayList<Employee> fromJson = new ArrayList<Employee>();
 			try {
 				if (!sharedResponse.isEmpty()) {
 					System.out.println(response);
-					ArrayList<Employee> fromJson = g.fromJson(sharedResponse,
+					fromJson = g.fromJson(sharedResponse,
 							new TypeToken<Collection<Employee>>() {
 					}.getType());
 
@@ -97,8 +110,21 @@ public class Test {
 			} catch (JsonSyntaxException e) {
 				e.printStackTrace();
 			}
-			response += "End of response\n";
-			System.out.println(response);
+			boolean oddEmployee = true;
+			for(Employee emp: fromJson){
+				if(oddEmployee){
+					response+= "<tr class=\"Oemployee\">";
+					oddEmployee = false;
+				}else{
+					response+= "<tr class=\"Eemployee\">";
+					oddEmployee = true;
+				}
+				response += emp.HTMLEmployee() + "</tr>";
+			}
+		    response += 
+		    "	</table>"
+		    + "</body>"
+		    + "</html>";
 			// write out the response
 			t.sendResponseHeaders(200, response.length());
 			OutputStream os = t.getResponseBody();
@@ -110,7 +136,7 @@ public class Test {
 	static class PostHandler implements HttpHandler {
 		public void handle(HttpExchange transmission) throws IOException {
 
-			//  shared data that is used with other handlers
+			// shared data that is used with other handlers
 			sharedResponse = "";
 
 			// set up a stream to read the body of the request
@@ -122,54 +148,53 @@ public class Test {
 			// string to hold the result of reading in the request
 			StringBuilder sb = new StringBuilder();
 
-			// read the characters from the request byte by byte and build up the sharedResponse
+			// read the characters from the request byte by byte and build up
+			// the sharedResponse
 			int nextChar = inputStr.read();
 			while (nextChar > -1) {
-				sb=sb.append((char)nextChar);
-				nextChar=inputStr.read();
+				sb = sb.append((char) nextChar);
+				nextChar = inputStr.read();
 			}
 
-
-
-			if(sharedResponse.equalsIgnoreCase("ADD ")){ //ADD response
+			if (sharedResponse.equalsIgnoreCase("ADD ")) { // ADD response
 				try {
 
 					PrintWriter writer = new PrintWriter("server.txt", "UTF-8");
 					writer.println(sb.toString());
 					writer.close();
 
-				}catch(Exception e){
+				} catch (Exception e) {
 					System.out.println();
 				}
 			}
-			
-			else if(sharedResponse.equalsIgnoreCase("PRINT")){
+
+			else if (sharedResponse.equalsIgnoreCase("PRINT")) {
 				Gson g = new Gson();
 				ArrayList<Employee> fromText = new ArrayList();
 			}
-			
-			else{ //CLEAR response
+
+			else { // CLEAR response
 				try {
 
 					PrintWriter writer = new PrintWriter("server.txt", "UTF-8");
 					writer.println("");
 					writer.close();
 
-				}catch(Exception e){
+				} catch (Exception e) {
 					System.out.println();
 				}
 			}
 
 			// create our response String to use in other handler
-			sharedResponse = sharedResponse+sb.toString();
-			
+			sharedResponse = sharedResponse + sb.toString();
+
 			// respond to the POST with ROGER
 			String postResponse = "POST REQUEST RECEIVED";
 
 			System.out.println("response: " + sharedResponse);
 
-			//Desktop dt = Desktop.getDesktop();
-			//dt.open(new File("raceresults.html"));
+			// Desktop dt = Desktop.getDesktop();
+			// dt.open(new File("raceresults.html"));
 
 			// assume that stuff works all the time
 			transmission.sendResponseHeaders(300, postResponse.length());

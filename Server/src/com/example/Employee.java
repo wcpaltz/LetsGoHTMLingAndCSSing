@@ -1,17 +1,21 @@
 package Server.src.com.example;
 
 public class Employee implements Comparable<Object>{
-	
+
+	private String title;
 	private String firstName;
 	private String lastName;
 	private String department;
 	private String phoneNumber;
+	private String gender;
 	
-	public Employee(String firstName, String lastName, String department, String phoneNum) {
+	public Employee(String title, String firstName, String lastName, String department, String phoneNum, String gender) {
+		this.title = title;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.department = department;
 		this.phoneNumber = phoneNum;
+		this.gender = gender;
 	}
 	
 	@Override
@@ -28,12 +32,14 @@ public class Employee implements Comparable<Object>{
 		return 0;
 	}
 	
-public String HTMLEmployee(){
+	public String HTMLEmployee(){
 		//Firstname, Lastname, Department, Phonenumber
-		return "<tr><td>" + this.firstName + "</td><td>" 
-				+ this.lastName + "</td><td>"
-				+ this.department + "</td><td>"
-				+ this.phoneNumber + "</td></tr>";
+		return "<td>" + this.title + "</td><td>"
+		+ this.firstName + "</td><td>" 
+		+ this.lastName + "</td><td>"
+		+ this.department + "</td><td>"
+		+ this.phoneNumber + "</td><td>"
+		+ this.gender + "</td>";
 	}
 
 }

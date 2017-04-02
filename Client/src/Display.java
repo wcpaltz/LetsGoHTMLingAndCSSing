@@ -29,11 +29,11 @@ public class Display extends JPanel {
 	private ButtonGroup group;
 
 	public static void main(String[] args) {
-		String[] labels = { "First Name:", "Department:", "Last Name:", "IP Address:", "Phone Number", "Title:", "Gender:" };
+		String[] labels = { "First Name:", "Last Name:", "Department:", "IP Address:", "Phone Number", "Title:", "Gender:" };
 		String[] comboButton = { "Mr.", "Mrs.", "Ms.", "Dr." };
 		String[] radioButton = { "Male", "Female" };
 		int[] widths = { 15, 15, 15, 15, 15 };
-		String[] descs = { "First Name", "Department", "Last Name", "IP Address", "Phone Number" };
+		String[] descs = { "First Name", "Last Name", "Department", "IP Address", "Phone Number" };
 
 		final Display form = new Display(labels, comboButton, radioButton, widths, descs);
 
