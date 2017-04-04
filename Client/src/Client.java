@@ -49,7 +49,21 @@ public class Client {
 
 						do{
 							//TODO convert GUI string to instantiate employees - Zak
-							
+							String[] emp = cont.split(":");
+							int n = 0;
+							String first = "", last = "", dept = "", phone= "", ipadd = "", titlee = "", gender = "";
+							for(String c : emp){
+								if(n == 0){	c.equals(first);}
+								if(n == 1){c.equals(last);}
+								if(n==2){c.equals(dept);}
+								if(n==3){c.equals(ipadd);}
+								if(n==4){c.equals(phone);}
+								if(n==5){c.equals(titlee);}
+								if(n==6){c.equals(gender);}
+								System.out.println(c);
+								n++;
+								
+							}
 							//empList.add(new Employee(first, last, dept, phone));
 
 							System.out.println("\nType 'STOP' to stop entering employees, or enter anything else to continue.");

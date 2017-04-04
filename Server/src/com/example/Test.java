@@ -53,14 +53,14 @@ public class Test {
 		public void handle(HttpExchange t) throws IOException {
 
 			//This will have to be used for reading, uncomment when we start implementing - WP
-//			String encoding = "UTF-8";
-//			t.getResponseHeaders().set("Content-Type", "text/html; charset=" + encoding);
+		//	String encoding = "UTF-8";
+			//t.getResponseHeaders().set("Content-Type", "text/html; charset=" + encoding);
 			//add CSS - Zak
 			String response =
 			"<!DOCTYPE html>  "
 			+ "<html>"   
 		  	+ "<head>"
-		    + "<link rel=\"stylesheet\" href=\"main.css\">"
+		    + "<link rel=\"stylesheet\" href=\"style.css\">"
 		    + "</head>"
 		    + "<style>"
 		    + "</style> <body>"
