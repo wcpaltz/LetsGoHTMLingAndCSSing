@@ -50,6 +50,7 @@ public class Display extends JPanel {
 		Clear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//SEND command "Clear" to client
+				System.err.println("Clearing Database...");
 			}
 		});
 		
@@ -59,11 +60,11 @@ public class Display extends JPanel {
 				
 				//Printing It
 				System.out.print(form.getText(0) + ":" + form.getText(1) + ":" + form.getText(2)
-				+ ":" + form.getText(3) + ":" + form.getCombo() + ":" + form.getRadio());
+				+ ":" + form.getText(3) + ":" + form.getText(4) + ":" + form.getCombo() + ":" + form.getRadio());
 				
 				//Storing It
 				String response = form.getText(0) + ":" + form.getText(1) + ":" + form.getText(2)
-				+ ":" + form.getText(3) + ":" + form.getCombo() + ":" + form.getRadio();
+				+ ":" + form.getText(3) + ":" + form.getText(4) + ":" + form.getCombo() + ":" + form.getRadio();
 				
 			}
 		});
