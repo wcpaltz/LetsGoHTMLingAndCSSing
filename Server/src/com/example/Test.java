@@ -89,6 +89,8 @@ public class Test {
 			// set up the header
 			System.out.println(response);
 			ArrayList<Employee> fromJson = new ArrayList<Employee>();
+			
+			//Begin Tanawat's Useless Code
 			try {
 				if (!sharedResponse.isEmpty()) {
 					System.out.println(response);
@@ -110,6 +112,8 @@ public class Test {
 			} catch (JsonSyntaxException e) {
 				e.printStackTrace();
 			}
+			//End Tanawat's Useless Code
+			
 			boolean oddEmployee = true;
 			for(Employee emp: fromJson){
 				if(oddEmployee){

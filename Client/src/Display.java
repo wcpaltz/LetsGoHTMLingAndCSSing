@@ -27,6 +27,8 @@ public class Display extends JPanel {
 	private JRadioButton Female;
 	private JRadioButton Other;
 	private ButtonGroup group;
+	static String response;
+	static String buttonClicked;
 
 	public static void main(String[] args) {
 		String[] labels = { "First Name:", "Last Name:", "Department:", "IP Address:", "Phone Number", "Title:", "Gender:" };
@@ -34,6 +36,7 @@ public class Display extends JPanel {
 		String[] radioButton = { "Male", "Female" };
 		int[] widths = { 15, 15, 15, 15, 15 };
 		String[] descs = { "First Name", "Last Name", "Department", "IP Address", "Phone Number" };
+		
 
 		final Display form = new Display(labels, comboButton, radioButton, widths, descs);
 
@@ -42,6 +45,7 @@ public class Display extends JPanel {
 		Print.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//SEND command "Print" to client
+				buttonClicked = "PRINT";
 			}
 		});
 		
@@ -50,6 +54,7 @@ public class Display extends JPanel {
 		Clear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//SEND command "Clear" to client
+				buttonClicked = "CLEAR";
 				System.err.println("Clearing Database...");
 			}
 		});
@@ -63,8 +68,10 @@ public class Display extends JPanel {
 				+ ":" + form.getText(3) + ":" + form.getText(4) + ":" + form.getCombo() + ":" + form.getRadio());
 				
 				//Storing It
-				String response = form.getText(0) + ":" + form.getText(1) + ":" + form.getText(2)
+				response = form.getText(0) + ":" + form.getText(1) + ":" + form.getText(2)
 				+ ":" + form.getText(3) + ":" + form.getText(4) + ":" + form.getCombo() + ":" + form.getRadio();
+				
+				buttonClicked = "ADD";
 				
 			}
 		});
@@ -80,6 +87,14 @@ public class Display extends JPanel {
 		f.getContentPane().add(p, BorderLayout.SOUTH);
 		f.pack();
 		f.setVisible(true);
+	}
+	
+	public static String getAddResponse(){
+		return response;
+	}
+	
+	public static String getButtonClicked(){
+		return buttonClicked;
 	}
 
 	// Create a form with the specified labels, tooltips, and sizes.
