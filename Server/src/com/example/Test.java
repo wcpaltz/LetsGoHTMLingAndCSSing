@@ -13,6 +13,8 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
+import java.util.Scanner;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -30,11 +32,32 @@ public class Test {
 	static String sharedResponse = "";
 	static String localResponse = "";
 	static boolean gotMessageFlag = false;
-	static ArrayList<Employee> fromJson = new ArrayList<Employee>();
-	static ArrayList<Employee> eList = new ArrayList<Employee>();
-
+//	static ArrayList<Employee> fromJson = new ArrayList<Employee>();
+//	static ArrayList<Employee> eList = new ArrayList<Employee>();
+	
+	static Racer newRacer;
+	static ArrayList<Racer> rList = new ArrayList<Racer>();
+	static String fileName = "server.txt";
+	static Scanner scan;
+	static NameMap nameMap = new NameMap();
+	
 	public static void main(String[] args) throws Exception {
 
+		try{
+		scan = new Scanner(fileName);
+		}catch(Exception e){
+			System.err.println("No such file found.");
+		}
+		
+		//Create NameMap database
+		while(scan.hasNextLine()){
+			String[] content = scan.nextLine().split(":");
+			String bib = content[0].trim();
+			String name = content[1].trim();
+			
+			nameMap.put(bib, name);
+		}
+		
 		// How to grab css
 		// server.createContext("/style.css", new StaticFileServer());
 
@@ -104,16 +127,16 @@ public class Test {
 
 			System.out.println(response);
 
-			boolean oddEmployee = true;
-			for (Employee emp : eList) {
-				if (oddEmployee) {
+			boolean oddRacer = true;
+			for (Racer r : rList) {
+				if (oddRacer) {
 					response += "<tr class=\"Oemployee\">";
-					oddEmployee = false;
+					oddRacer = false;
 				} else {
 					response += "<tr class=\"Eemployee\">";
-					oddEmployee = true;
+					oddRacer = true;
 				}
-				response += emp.HTMLEmployee() + "</tr>";
+				response += r.HTMLRacer() + "</tr>";
 			}
 			response += "	</table>" + "</body>" + "</html>";
 
@@ -155,9 +178,16 @@ public class Test {
 			// parse command TODO, need better way to write to file possibly
 			if (sharedResponse.substring(0, 3).equals("ADD")) { // ADD response
 				sharedResponse = sharedResponse.substring(4);
-				fromJson = g.fromJson(sharedResponse, new TypeToken<ArrayList<Employee>>() {
+				
+				Racer r = g.fromJson(sharedResponse, new TypeToken<Racer>(){
 				}.getType());
-				eList.addAll(fromJson);
+				
+				if(nameMap.containsKey(r.getBib())){
+					r.setName(nameMap.get(r.getBib()));
+				}
+				
+				rList.add(r);
+
 			}
 
 			// else if (sharedResponse.substring(0,5).equals("PRINT")) {
