@@ -1,4 +1,8 @@
 package Client.src;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -8,6 +12,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Scanner;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -15,140 +23,151 @@ public class Client {
 
 	public static void main(String[] args) {
 
-		Scanner stdIn = new Scanner(System.in);
+		String[] labels = { "First Name:", "Last Name:", "Department:", "IP Address:", "Phone Number", "Title:",
+				"Gender:" };
+		String[] comboButton = { "Mr.", "Mrs.", "Ms.", "Dr." };
+		String[] radioButton = { "Male", "Female" };
+		int[] widths = { 15, 15, 15, 15, 15 };
+		String[] descs = { "First Name", "Last Name", "Department", "IP Address", "Phone Number" };
 
+		// Create display
+		final Display form = new Display(labels, comboButton, radioButton, widths, descs);
+
+		// try to start the client to send stuff to the server
 		try {
 			System.out.println("in the client");
 
-			// Client will connect to this location
-			URL site = new URL("http://localhost:8000/sendresults");
-			HttpURLConnection conn = (HttpURLConnection) site.openConnection();
 
-			while(true){ //TODO: Remove this in place for UI?
-				String content = "";
+			JButton Add = new JButton("Add"); // TODO: Add Begins Here
+			Add.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
 
-				//				// now create a POST request
-				//				conn.setRequestMethod("POST");
-				//				conn.setDoOutput(true);
-				//				conn.setDoInput(true);
-				//				DataOutputStream out = new DataOutputStream(conn.getOutputStream());
+					// Printing It
+					System.out.print(form.getText(0) + ":" + form.getText(1) + ":" + form.getText(2) + ":"
+							+ form.getText(3) + ":" + form.getText(4) + ":" + form.getCombo() + ":" + form.getRadio());
 
-				//Take user input
-				String command = stdIn.nextLine();
+					// Storing It
+					String response = form.getText(0) + ":" + form.getText(1) + ":" + form.getText(2) + ":"
+							+ form.getText(3) + ":" + form.getText(4) + ":" + form.getCombo() + ":" + form.getRadio();
 
-				while(!(command.equalsIgnoreCase("ADD")||command.equalsIgnoreCase("PRINT")||command.equalsIgnoreCase("CLEAR")||command.equalsIgnoreCase("QUIT"))){
-					System.err.println("Invalid arguments!");
-					command = stdIn.nextLine();
-				}
+					// Begin splitting String
+					ArrayList<Employee> empList = new ArrayList<Employee>();
 
-				if(!command.equalsIgnoreCase("QUIT")){
-
-					if(command.equalsIgnoreCase("ADD")){
-						ArrayList<Employee> empList = new ArrayList<Employee>();
-						String cont = "";
-
-						do{
-							//TODO convert GUI string to instantiate employees - Zak
-							
-							//empList.add(new Employee(first, last, dept, phone));
-
-							System.out.println("\nType 'STOP' to stop entering employees, or enter anything else to continue.");
-							cont = stdIn.nextLine();
-
-
-						}while(!cont.equalsIgnoreCase("STOP"));
-
-						// now create a POST request
-						conn.setRequestMethod("POST");
-						conn.setDoOutput(true);
-						conn.setDoInput(true);
-						DataOutputStream out = new DataOutputStream(conn.getOutputStream());
-
-						// build a string that contains JSON from console
-						content = "ADD " + getJSON(empList); 
-
-						// write out string to output buffer for message
-						out.writeBytes(content);
-						out.flush(); //cleans up the buffer
-						out.close(); //sends it to the server
-
-						System.out.println("Done sent to server");
-
+					// separating employee characteristics
+					String[] emp = response.split(":");
+					int n = 0;
+					String first = "", last = "", dept = "", phone = "", ip = "", title = "", gender = "";
+					for (String c : emp) {
+						if (n == 0) {
+							first = c;
+						}
+						if (n == 1) {
+							last = c;
+						}
+						if (n == 2) {
+							dept = c;
+						}
+						if (n == 3) {
+							ip = c;
+						}
+						if (n == 4) {
+							phone = c;
+						}
+						if (n == 5) {
+							title = c;
+						}
+						if (n == 6) {
+							gender = c;
+						}
+						n++;
 
 					}
 
-					else if(command.equalsIgnoreCase("PRINT")){
+					// add a single employee to the employee list that we are
+					// going to send to the server some day
+					empList.add(new Employee(title, first, last, dept, phone, gender));
 
-						// now create a POST request
-						conn.setRequestMethod("POST");
-						conn.setDoOutput(true);
-						conn.setDoInput(true);
-						DataOutputStream out = new DataOutputStream(conn.getOutputStream());
+					String content = "";
 
-						// build a string that contains JSON from console
-						content = "PRINT";
+					// TODO: Error-causing POST Request
+					try {
 
-						// write out string to output buffer for message
-						out.writeBytes(content);
-						out.flush(); //cleans up the buffer
-						out.close(); //sends it to the server
-
-						System.out.println("Done sent to server");
-					}
-
-					else if(command.equalsIgnoreCase("CLEAR")){
-
-						// now create a POST request
-						conn.setRequestMethod("POST");
-						conn.setDoOutput(true);
-						conn.setDoInput(true);
-						DataOutputStream out = new DataOutputStream(conn.getOutputStream());
-
-						// build a string that contains JSON from console
-						content = "CLEAR";
-
-						// write out string to output buffer for message
-						out.writeBytes(content);
-						out.flush(); //cleans up the buffer
-						out.close(); //sends it to the server
-
-						System.out.println("Done sent to server");
+						// Client will connect to this location
+						URL site = new URL("http://localhost:8000/sendresults");
 						
+						//connect to the socket, server already has socket open
+						final HttpURLConnection conn = (HttpURLConnection) site.openConnection();
+						
+						//now create a POST request
+						conn.setRequestMethod("POST");
+						
+						//not sure what this does
+						conn.setDoOutput(true);
+						conn.setDoInput(true);
+						
+						//creating output "channel"/data stream - client to server, output from client
+						DataOutputStream out = new DataOutputStream(conn.getOutputStream());
+
+						// build a string that contains JSON from console, will
+						// list of employees
+						content = "ADD:" + getJSON(empList);
+
+						//Packages it all up and sends to the server
+						// write out string to output buffer for message
+						out.writeBytes(content);
+						out.flush(); // cleans up the buffer
+						out.close(); // sends it to the server
+						
+						//reads the response from the server after post, complete connection with input stream
+						InputStreamReader inputStr = new InputStreamReader(conn.getInputStream());
+
+						//creating the response from server
+						StringBuilder sb = new StringBuilder();
+
+						// read the characters from the request byte by byte and build up
+						// the Response
+						int nextChar;
+						while ((nextChar = inputStr.read()) > -1) {
+							sb = sb.append((char) nextChar);
+						}
+						System.out.println("Return String: " + sb);
+
+					} catch (Exception f) {
+						f.printStackTrace();
 					}
+					System.out.println("Done sent to server");
 
 				}
 
-				else{ //Quit function
-					System.err.println("Acquiring Thai Candy...");
-					break;
-				}
+				// //TODO
+				// JButton Print = new JButton("Print");
+				// Print.addActionListener(new ActionListener() {
+				// public void actionPerformed(ActionEvent e) {
+				// //SEND command "Print" to client
+				// }
+				// });
+				//
+				// //TODO
+				// JButton Clear = new JButton("Clear");
+				// Clear.addActionListener(new ActionListener() {
+				// public void actionPerformed(ActionEvent e) {
+				// //SEND command "Clear" to client
+				// System.err.println("Clearing Database...");
+				// }
+				// });
+				//
+			});
 
-
-
-//				// build a string that contains JSON from console
-//				//String content = "";
-//				//content = command.toUpperCase() + getJSON(); 
-//
-//				// write out string to output buffer for message
-//				out.writeBytes(content);
-//				out.flush(); //cleans up the buffer
-//				out.close(); //sends it to the server
-//
-//				System.out.println("Done sent to server");
-
-				InputStreamReader inputStr = new InputStreamReader(conn.getInputStream());
-
-				// string to hold the result of reading in the response
-				StringBuilder sb = new StringBuilder();
-
-				// read the characters from the request byte by byte and build up
-				// the Response
-				int nextChar;
-				while ((nextChar = inputStr.read()) > -1) {
-					sb = sb.append((char) nextChar);
-				}
-				System.out.println("Return String: " + sb);
-			}
+			JFrame f = new JFrame("Text Form Example");
+			f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			f.getContentPane().add(form, BorderLayout.NORTH);
+			JPanel p = new JPanel();
+			// p.add(Print);
+			p.add(Add);
+			// p.add(Clear);
+			f.getContentPane().add(p, BorderLayout.SOUTH);
+			f.pack();
+			f.setVisible(true);
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -2,7 +2,7 @@
             width: 800px;
             text-align:center;
         }
-        tr.header{
+        tr:header{
             color:blue;
         }
         tr, td{
@@ -11,7 +11,7 @@
         tr.Eemployee, tr.Oemployee{
             font-size: 14px;
         }
-        tr.Eemployee{
+        tr.Eemployee:nth-child(even){
             background-color:#efefef;
         }
         
