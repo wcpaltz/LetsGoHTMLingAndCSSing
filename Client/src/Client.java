@@ -23,12 +23,12 @@ public class Client {
 
 	public static void main(String[] args) {
 
-		String[] labels = { "First Name:", "Last Name:", "Department:", "IP Address:", "Phone Number", "Title:",
-				"Gender:" };
-		String[] comboButton = { "Mr.", "Mrs.", "Ms.", "Dr." };
-		String[] radioButton = { "Male", "Female" };
+		String[] labels = { "Bib:", "Time:", "", "", "", "",
+				"" };
+		String[] comboButton = {};
+		String[] radioButton = { "", "" };
 		int[] widths = { 15, 15, 15, 15, 15 };
-		String[] descs = { "First Name", "Last Name", "Department", "IP Address", "Phone Number" };
+		String[] descs = { "Bib", "Time", "", "", "" };
 
 		// Create display
 		final Display form = new Display(labels, comboButton, radioButton, widths, descs);
@@ -51,7 +51,8 @@ public class Client {
 							+ form.getText(3) + ":" + form.getText(4) + ":" + form.getCombo() + ":" + form.getRadio();
 
 					// Begin splitting String
-					ArrayList<Employee> empList = new ArrayList<Employee>();
+					//ArrayList<Employee> empList = new ArrayList<Employee>();
+					Racer example;
 
 					// separating employee characteristics
 					String[] emp = response.split(":");
@@ -85,7 +86,8 @@ public class Client {
 
 					// add a single employee to the employee list that we are
 					// going to send to the server some day
-					empList.add(new Employee(title, first, last, dept, phone, gender));
+					//empList.add(new Employee(title, first, last, dept, phone, gender));
+					example = new Racer(first, last);
 
 					String content = "";
 
@@ -110,7 +112,7 @@ public class Client {
 
 						// build a string that contains JSON from console, will
 						// list of employees
-						content = "ADD:" + getJSON(empList);
+						content = "ADD:" + getJSON(example);
 
 						//Packages it all up and sends to the server
 						// write out string to output buffer for message
@@ -174,9 +176,9 @@ public class Client {
 		}
 	}
 
-	private static String getJSON(ArrayList<Employee> empList) {
+	private static String getJSON(Racer r) {
 		Gson g = new Gson();
-		String json = g.toJson(empList);
+		String json = g.toJson(r);
 		return json;
 	}
 
